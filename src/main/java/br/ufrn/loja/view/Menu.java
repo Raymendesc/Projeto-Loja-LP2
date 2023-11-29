@@ -2,6 +2,7 @@ package br.ufrn.loja.view;
 
 import java.util.Scanner;
 
+import br.ufrn.loja.exception.OpcaoInvalidaException;
 import br.ufrn.loja.utils.CorUtils;
 
 public class Menu {
@@ -47,7 +48,7 @@ public class Menu {
 	 */
 	private void telaInicial() {
 
-		System.out.println("\n"+CorUtils.laranja("Digite a opção:"));
+		System.out.println("\n" + CorUtils.laranja("Digite a opção:"));
 		System.out.println(CADASTRAR + " - Cadastrar Produto");
 		System.out.println(BUSCAR + " - Buscar Produto");
 		System.out.println(VER_TODOS + " - Ver todos os produtos");
@@ -63,29 +64,33 @@ public class Menu {
 	 * desejada
 	 */
 	private void realizarAcao() {
-		switch (opcao) {
-		case CADASTRAR:
-			new TelaCadastro(in).run();
-			break;
+		try {
+	        switch (opcao) {
+	            case CADASTRAR:
+	                new TelaCadastro(in).run();
+	                break;
 
-		case BUSCAR:
-			System.out.println("Busacando");
-			break;
+	            case BUSCAR:
+	                System.out.println("Buscando");
+	                break;
 
-		case VER_TODOS:
-			System.out.println("Vendo todos");
-			break;
+	            case VER_TODOS:
+	                new TelaBusca(in).run(opcao);
+	                break;
 
-		case FATURAMENTO:
-			System.out.println("Exibindo faturamento");
-			break;
+	            case FATURAMENTO:
+	                System.out.println("Exibindo faturamento");
+	                break;
 
-		case SAIR:
-			saiu = true;
-			break;
+	            case SAIR:
+	                saiu = true;
+	                break;
 
-		default:
-			System.out.println("Valor Invalido!");// criar uma exceção
-		}
+	            default:
+	                throw new OpcaoInvalidaException("Opção inválida! Por favor, escolha uma opção válida.");
+	        }
+	    } catch (OpcaoInvalidaException e) {
+	        System.out.println(CorUtils.vermelho(e.getMessage()));
+	    }
 	}
 }
