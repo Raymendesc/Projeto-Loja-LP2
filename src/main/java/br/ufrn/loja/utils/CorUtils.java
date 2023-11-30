@@ -10,7 +10,7 @@ public class CorUtils {
 	}
 
 	public static String azul(String texto) {
-		return "\u001B[34m" + texto + "\u001B[0m";
+		 return "\u001B[94;1m" + texto + "\u001B[0m";
 	}
 
 	public static String laranja(String texto) {

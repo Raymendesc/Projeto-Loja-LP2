@@ -1,5 +1,6 @@
 package br.ufrn.loja.exception;
 
+@SuppressWarnings("serial")
 public class CriacaoConexaoException extends RuntimeException {
 
     public CriacaoConexaoException(String mensagem) {

@@ -14,18 +14,6 @@ public class Produto {
 	private int estoque;
 	private String fabricante;
 
-	public Produto() {
-	}
-
-	public Produto(String nome, double preco_custo, double preco_venda, int estoque, String fabricante) {
-
-		this.nome = nome;
-		this.preco_custo = preco_custo;
-		this.preco_venda = preco_venda;
-		this.estoque = estoque;
-		this.fabricante = fabricante;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -78,7 +66,4 @@ public class Produto {
 	public String toString() {
 		return String.format("%-5d%-20s%-15.2f%-15.2f%-10d%s%n", id, nome, preco_custo, preco_venda, estoque, fabricante);
 	}
-
-	
-	
 }

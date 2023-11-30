@@ -1,38 +1,61 @@
 package br.ufrn.loja.view;
 
 import java.util.Scanner;
-
 import br.ufrn.loja.model.Produto;
-import br.ufrn.loja.services.AbstractService;
-import br.ufrn.loja.services.ProdutoService;
+import br.ufrn.loja.utils.CorUtils;
 
-public class TelaBusca {
+public class TelaBusca extends MenuAbstract {
 
-	private boolean saiu = false;
-	private Scanner in;
-	private int opcao;
-	private AbstractService<Produto> produtoService = new ProdutoService();
+    public TelaBusca(Scanner in) {
+        this.in = in;
+        produtoService.setObjeto(new Produto());
+    }
 
-	public TelaBusca(Scanner in) {
-		this.in = in;
-	}
+    /**
+     * Método que inicia a execução da TelaBusca.
+     */
+    public void run(int opcao) {
+        this.opcao = opcao;
+        switch (this.opcao) {
+            case VER_TODOS:
+            	 produtoService.processar(VER_TODOS);
+                break;
+            case BUSCAR:
+                buscarProduto();
+                break;
+            default:
+                System.out.println("Opção inválida");
+        }
+    }
 
-	/**
-	 * @brief Método que inicia a execução da TelaBusca.
-	 */
-	public void run(int opcao) {
-		this.opcao = opcao;
-		switch (this.opcao) {
-		case Menu.VER_TODOS:
-			verTodos();
-			break;
-		default:
-			System.out.println("Erro");
-		}
-	}
+    private void buscarProduto() {
+        System.out.println("Digite o ID para a busca");
+        produtoService.getObjeto().setId(in.nextInt());
 
-	private void verTodos() {
-		produtoService.processar(opcao);
-	}
+        if (produtoService.buscar()) {
+            exibirOpcoesAlteracaoRemocao();
+        }
+    }
 
+    private void exibirOpcoesAlteracaoRemocao() {
+        System.out.println("["+SAIR+"] Voltar   ["+REMOVER+"] Remover    ["+ALTERAR+"] Alterar");
+        opcao = in.nextInt();
+
+        if (opcao != SAIR) {
+            if (opcao == REMOVER) {
+                produtoService.processar(REMOVER);
+            } else if (opcao == ALTERAR) {
+                alterarProduto();
+            } else {
+                System.out.println(CorUtils.vermelho("Opção inválida!"));
+            }
+        }
+    }
+
+    private void alterarProduto() {
+        int id = produtoService.getObjeto().getId();
+        produtoService.setObjeto(lerProduto());
+        produtoService.getObjeto().setId(id);
+        produtoService.processar(ALTERAR);
+    }
 }
