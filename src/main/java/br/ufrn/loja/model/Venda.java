@@ -13,5 +13,7 @@ public class Venda {
     private Date dataVenda;
     private double valorTotal;
 
+    //OUTRAS FEATURES?
+
     // Construtor, getters e setters
 }

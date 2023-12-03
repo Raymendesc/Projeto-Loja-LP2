@@ -1,8 +1,15 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/u8b1GGH-)
 
 # Sistema de Loja 
+Este é um sistema de gerenciamento para uma loja de produtos. Ele permite gerenciar produtos, realizar vendas, e manter registros de transações.
 
 ## Proposito do projeto
+
+## Tecnologias Utilizadas
+
+- Java
+- JDBC para conexão com banco de dados
+- Testes unitários com JUnit
 
 ## Diagrma de Classes
 
@@ -11,6 +18,24 @@
 - Java 17;
 - MySQL
 - Gradle
+
+## Estrutura do Projeto
+
+O projeto está organizado em várias camadas, cada uma responsável por diferentes aspectos do sistema:
+
+- `model`: Contém as classes que representam as entidades do negócio (Produto, Venda, etc.).
+- `dao`: Camada de acesso a dados, com classes responsáveis pela interação com o banco de dados.
+- `services`: Contém a lógica de negócios e interage com a camada de acesso a dados.
+- `view`: Responsável pela interface de usuário, onde as interações com o usuário acontecem.
+- `exception`: Contém as exceções personalizadas usadas no projeto.
+- `utils`: Fornece utilitários diversos, como manipulação de cores e arquivos.
+
+## Recursos Disponíveis
+
+- Gestão de produtos: adicionar, atualizar, remover e buscar produtos.
+- Realização de vendas: registrar vendas de produtos.
+- Consulta de vendas: visualizar o histórico de vendas.
+
 
 ## Como realizar o build e executar o projeto
 
