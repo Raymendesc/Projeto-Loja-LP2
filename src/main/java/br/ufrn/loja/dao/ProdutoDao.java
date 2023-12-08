@@ -31,7 +31,7 @@ public class ProdutoDao implements GenericDao<Produto> {
 		con = ConnectionFactory.getInstance().getConnection();
 	}
 
-	
+
 	@Override
 	public void salvar(Produto obj) {
 		try {
@@ -53,7 +53,7 @@ public class ProdutoDao implements GenericDao<Produto> {
 			statement = con.createStatement();
 			ResultSet rs = statement.executeQuery(SELECT_ALL);
 			while (rs.next()) {
-				
+
 				Produto produto = new ProdutoBuilder()
 						.comId(rs.getInt("id"))
 						.comNome(rs.getString("nome"))
@@ -61,7 +61,7 @@ public class ProdutoDao implements GenericDao<Produto> {
 						.comPrecoVenda(rs.getDouble("preco_venda"))
 						.comEstoque(rs.getInt("estoque"))
 						.comFabricante(rs.getString("fabricante")).build();
-				
+
 				resultado.add(produto);
 			}
 		} catch (SQLException e) {
@@ -136,7 +136,7 @@ public class ProdutoDao implements GenericDao<Produto> {
 			fecharRecursos();
 		}
 	}
-	
+
 	/**
 	 * @brief Fecha os recursos (Statement) utilizados para interagir com o banco de
 	 *        dados.

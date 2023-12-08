@@ -1,7 +1,7 @@
 package br.ufrn.loja.model;
 
 /**
- * 
+ *
  * Classe responsavel pela entidade produto
  *
  */

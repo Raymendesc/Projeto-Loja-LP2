@@ -4,8 +4,10 @@ import java.util.Scanner;
 
 import br.ufrn.loja.model.Produto;
 import br.ufrn.loja.model.ProdutoBuilder;
+import br.ufrn.loja.model.Venda;
 import br.ufrn.loja.services.AbstractService;
 import br.ufrn.loja.services.ProdutoService;
+import br.ufrn.loja.services.VendaService;
 
 public abstract class MenuAbstract {
 
@@ -19,6 +21,8 @@ public abstract class MenuAbstract {
 	public static final int ALTERAR = 7;
 	
 	protected AbstractService<Produto> produtoService = new ProdutoService();
+
+	protected VendaService vendaService = new VendaService();
 	protected int opcao;
 	protected boolean saiu = false;
 	protected Scanner in = new Scanner(System.in);

@@ -5,7 +5,7 @@ import java.util.Scanner;
 import br.ufrn.loja.exception.OpcaoInvalidaException;
 import br.ufrn.loja.utils.CorUtils;
 
-public class Menu extends MenuAbstract{
+public class Menu extends MenuAbstract {
 
 	public Menu() {
 		saiu = false;
@@ -39,16 +39,16 @@ public class Menu extends MenuAbstract{
 	private void telaInicial() {
 
 		System.out.println("╔══════════════════════════════════════╗");
-        System.out.println("║           "+CorUtils.laranja("MENU DE OPÇÕES")+"             ║");
-        System.out.println("╠══════════════════════════════════════╣");
-        System.out.println("║  "+CADASTRAR+". Cadastrar Produto                ║");
-        System.out.println("║  "+BUSCAR+". Buscar Produto                   ║");
-        System.out.println("║  "+VER_TODOS+". Ver Todos                        ║");
-        System.out.println("║  "+FATURAMENTO+". Faturamento                      ║");
-        System.out.println("║  "+VENDER+". Vender                           ║");
-        System.out.println("║  "+SAIR+". Sair                             ║");
-        System.out.println("╚══════════════════════════════════════╝");
-        System.out.print("Escolha uma opção: ");
+		System.out.println("║           " + CorUtils.laranja("MENU DE OPÇÕES") + "             ║");
+		System.out.println("╠══════════════════════════════════════╣");
+		System.out.println("║  " + CADASTRAR + ". Cadastrar Produto                ║");
+		System.out.println("║  " + BUSCAR + ". Buscar Produto                   ║");
+		System.out.println("║  " + VER_TODOS + ". Ver Todos                        ║");
+		System.out.println("║  " + FATURAMENTO + ". Faturamento                      ║");
+		System.out.println("║  " + VENDER + ". Vender                           ║");
+		System.out.println("║  " + SAIR + ". Sair                             ║");
+		System.out.println("╚══════════════════════════════════════╝");
+		System.out.print("Escolha uma opção: ");
 		this.opcao = in.nextInt();
 
 	}
@@ -59,32 +59,36 @@ public class Menu extends MenuAbstract{
 	 */
 	private void realizarAcao() {
 		try {
-	        switch (opcao) {
-	            case CADASTRAR:
-	                new TelaCadastro(in).run();
-	                break;
+			switch (opcao) {
+				case CADASTRAR:
+					new TelaCadastro(in).run();
+					break;
 
-	            case BUSCAR:
-	            	new TelaBusca(in).run(opcao);
-	                break;
+				case BUSCAR:
+					new TelaBusca(in).run(opcao);
+					break;
 
-	            case VER_TODOS:
-	                new TelaBusca(in).run(opcao);
-	                break;
+				case VER_TODOS:
+					new TelaBusca(in).run(opcao);
+					break;
 
-	            case FATURAMENTO:
-	                System.out.println("Exibindo faturamento");
-	                break;
+				case FATURAMENTO:
+					System.out.println("Exibindo faturamento");
+					break;
 
-	            case SAIR:
-	                saiu = true;
-	                break;
+				case VENDER:
+					new TelaVendas(in).exibirMenuVendas();
+					break;
 
-	            default:
-	                throw new OpcaoInvalidaException("Opção inválida! Por favor, escolha uma opção válida.");
-	        }
-	    } catch (OpcaoInvalidaException e) {
-	        System.out.println(CorUtils.vermelho(e.getMessage()));
-	    }
+				case SAIR:
+					saiu = true;
+					break;
+
+				default:
+					throw new OpcaoInvalidaException("Opção inválida! Por favor, escolha uma opção válida.");
+			}
+		} catch (OpcaoInvalidaException e) {
+			System.out.println(CorUtils.vermelho(e.getMessage()));
+		}
 	}
 }

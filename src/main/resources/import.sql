@@ -6,3 +6,20 @@ CREATE TABLE IF NOT EXISTS produto (
     estoque INTEGER,
     fabricante VARCHAR(40)
 );
+CREATE TABLE IF NOT EXISTS venda (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    data DATE,
+    total_venda REAL
+);
+
+CREATE TABLE IF NOT EXISTS item_venda (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    venda_id INTEGER,
+    produto_id INTEGER,
+    quantidade INTEGER,
+    preco_unitario REAL,
+    subtotal REAL,
+    FOREIGN KEY (produto_id) REFERENCES produto(id),
+    FOREIGN KEY (venda_id) REFERENCES venda(id)
+);
+
