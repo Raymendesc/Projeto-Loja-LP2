@@ -6,7 +6,6 @@ public class ItemVenda {
     private int quantidade;
 
     private Venda vendaId;
-    private double total;
 
     public int getId() {
         return id;
@@ -48,15 +47,6 @@ public class ItemVenda {
             return quantidade * produto.getPreco_venda();
         }
         return 0;
-    }
-
-    public double getTotal() {
-        double total = 0;
-        ItemVenda[] itens = new ItemVenda[0];
-        for (ItemVenda item : itens) {
-            total += item.getSubtotal();
-        }
-        return total;
     }
 }
 

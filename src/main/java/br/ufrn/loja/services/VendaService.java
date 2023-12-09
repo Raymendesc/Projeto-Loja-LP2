@@ -1,9 +1,13 @@
 package br.ufrn.loja.services;
 
+import br.ufrn.loja.dao.ItemVendaDao;
 import br.ufrn.loja.dao.VendaDao;
+import br.ufrn.loja.model.ItemVenda;
 import br.ufrn.loja.model.Venda;
 import br.ufrn.loja.utils.CorUtils;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class VendaService extends AbstractService<Venda> {
@@ -56,10 +60,23 @@ public class VendaService extends AbstractService<Venda> {
         }
     }
 
-    public Venda[] obterTodasAsVendas() {
+    /**
+     * @brief Obtém todas as vendas no intervalo de datas especificado.
+     * @param inicio Data de início do intervalo no formato "yyyy-MM-dd".
+     * @param fim Data de fim do intervalo no formato "yyyy-MM-dd".
+     * @return Lista de vendas no intervalo de datas especificado.
+     */
+    public List<Venda> obterTodasAsVendas(String inicio, String fim) {
         List<Venda> listaDeVendas = dao.buscarTodos();
-        Venda[] arrayDeVendas = new Venda[listaDeVendas.size()];
-        return ((List<?>) listaDeVendas).toArray(arrayDeVendas);
+        List<Venda> retorno = new ArrayList<>();
+        for(Venda venda : listaDeVendas) {
+        	if(venda.getData().isAfter(LocalDate.parse(inicio)) || venda.getData().isEqual(LocalDate.parse(inicio))) {
+        		if(venda.getData().isBefore(LocalDate.parse(fim)) || venda.getData().isEqual(LocalDate.parse(fim))) {
+        			retorno.add(venda);
+        		}
+        	}
+        }
+        return retorno;
     }
 
 }

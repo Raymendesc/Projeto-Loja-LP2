@@ -64,6 +64,6 @@ public class Produto {
 
 	@Override
 	public String toString() {
-		return String.format("%-5d%-20s%-15.2f%-15.2f%-10d%s%n", id, nome, preco_custo, preco_venda, estoque, fabricante);
+		return String.format("%-5d%-28s%-15.2f%-15.2f%-10d%s%n", id, nome, preco_custo, preco_venda, estoque, fabricante);
 	}
 }

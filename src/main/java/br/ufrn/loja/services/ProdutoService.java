@@ -25,8 +25,8 @@ public class ProdutoService extends AbstractService<Produto> {
 
 	@Override
 	protected void imprimir() {
-		System.out.println("\n----- Lista de Produtos ----------------------");
-        System.out.printf("%-5s%-20s%-15s%-15s%-10s%s\n", "ID", "Nome", "Preço Custo", "Preço Venda", "Estoque", "Fabricante");
+		System.out.println("\n------ "+CorUtils.laranja("Lista de Produtos")+" ----------------------");
+        System.out.printf("%-5s%-25s%-15s%-15s%-10s%s\n", "ID", "Nome", "Preço Custo", "Preço Venda", "Estoque", "Fabricante");
         dao.buscarTodos().forEach(System.out::print);
         System.out.println("------------------------------------------------");
 		

@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS produto (
 CREATE TABLE IF NOT EXISTS venda (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     data DATE,
+    status VARCHAR(10),
     total_venda REAL
 );
 
@@ -17,7 +18,6 @@ CREATE TABLE IF NOT EXISTS item_venda (
     venda_id INTEGER,
     produto_id INTEGER,
     quantidade INTEGER,
-    preco_unitario REAL,
     subtotal REAL,
     FOREIGN KEY (produto_id) REFERENCES produto(id),
     FOREIGN KEY (venda_id) REFERENCES venda(id)

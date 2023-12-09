@@ -1,6 +1,7 @@
 package br.ufrn.loja.view;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import br.ufrn.loja.dao.ProdutoDao;
@@ -8,110 +9,152 @@ import br.ufrn.loja.model.ItemVenda;
 import br.ufrn.loja.model.Produto;
 import br.ufrn.loja.model.Venda;
 import br.ufrn.loja.services.VendaService;
+import br.ufrn.loja.utils.CorUtils;
 
+/**
+ * @brief Classe que representa a tela de vendas e suas funcionalidades.
+ */
 public class TelaVendas extends MenuAbstract {
 
-    private static final int VENDER = 1;
-    private static final int VER_TODOS = 2;
+	public TelaVendas(Scanner in) {
+		this.in = in;
+	}
 
-    public TelaVendas(Scanner in) {
-        this.in = in;
-    }
+	/**
+	 * @brief Exibe o menu de vendas e processa as opções escolhidas pelo usuário.
+	 */
+	public void exibirMenuVendas() {
+		while (!saiu) {
+			exibirOpcoesVendas();
+			processarOpcaoVendas();
+		}
+	}
 
-    public void exibirMenuVendas() {
-        while (!saiu) {
-            exibirOpcoesVendas();
-            processarOpcaoVendas();
-        }
-    }
+	/**
+	 * @brief Exibe as opções do menu de vendas.
+	 */
+	public void exibirOpcoesVendas() {
 
-    public void exibirOpcoesVendas() {
-        System.out.println("\n----- Menu de Vendas ------------------------");
-        System.out.println("1. Iniciar Nova Venda");
-        System.out.println("2. Exibir Vendas Realizadas");
-        System.out.println("0. Voltar ao Menu Principal");
-        System.out.println("---------------------------------------------");
-        System.out.println("Escolha a opção: ");
-        opcao = in.nextInt();
-    }
+		System.out.println("╔══════════════════════════════════════╗");
+		System.out.println("║           " + CorUtils.laranja("MENU DE VENDAS") + "             ║");
+		System.out.println("╠══════════════════════════════════════╣");
+		System.out.println("║  " + CADASTRAR + ". Iniciar Nova Venda               ║");
+		System.out.println("║  " + BUSCAR + ". Buscar uma venda                 ║");
+		System.out.println("║  " + VER_TODOS + ". Exibir Vendas Realizadas         ║");
+		System.out.println("║  " + SAIR + ". Sair                             ║");
+		System.out.println("╚══════════════════════════════════════╝");
+		System.out.print("Escolha uma opção: ");
 
-    private void processarOpcaoVendas() {
-        System.out.println("Opção escolhida: " + opcao);
+		opcao = in.nextInt();
+	}
 
-        switch (opcao) {
-            case SAIR:
-                saiu = true;
-                break;
-            case VENDER:
-                iniciarNovaVenda();
-                break;
-            case VER_TODOS:
-                exibirVendasRealizadas();
-                break;
-            default:
-                System.out.println("Opção inválida. Tente novamente.");
-        }
-    }
+	/**
+	 * @brief Processa a opção escolhida pelo usuário no menu de vendas.
+	 */
+	private void processarOpcaoVendas() {
+		System.out.println("Opção escolhida: " + opcao);
 
-    private void exibirVendasRealizadas() {
-        System.out.println("Exibindo as vendas realizadas:");
+		switch (opcao) {
+		case SAIR:
+			saiu = true;
+			break;
+		case CADASTRAR:
+			iniciarNovaVenda();
+			break;
+		case BUSCAR:
+			System.out.println("Buscando..");
+			break;
+		case VER_TODOS:
+			exibirVendasRealizadas();
+			break;
+		default:
+			System.out.println("Opção inválida. Tente novamente.");
+		}
+	}
 
+	/**
+	 * @brief Exibe as vendas realizadas em um determinado período.
+	 */
+	private void exibirVendasRealizadas() {
+		System.out.println("Digite o periodo no formato (yyyy-mm-dd)");
+		System.out.print("Inicio: ");
+		in.nextLine();
+		String inicio = in.nextLine();
 
-        for (Venda venda : vendaService.obterTodasAsVendas()) {
-            System.out.printf("ID da Venda: %d\n", venda.getId());
-            System.out.printf("Data da Venda: %s\n", venda.getData());
+		System.out.print("Termino: ");
+		String termino = in.nextLine();
+		System.out.println(CorUtils.laranja("\n-------Exibindo as vendas realizadas:-------\n"));
 
-            System.out.println("Itens:");
-            for (ItemVenda item : venda.getItens()) {
-                System.out.printf("- Produto: %s, Quantidade: %d, Subtotal: %.2f\n",
-                        item.getProduto().getNome(), item.getQuantidade(), item.getSubtotal());
-            }
+		for (Venda venda : vendaService.obterTodasAsVendas(inicio, termino)) {
+			imprimirVenda(venda);
+		}
+	}
 
-            System.out.println("--------------------------------------------");
-        }
-    }
-    private void iniciarNovaVenda() {
-        VendaService vendaService = new VendaService();
-        ProdutoDao produtoDao = new ProdutoDao();
-        Venda novaVenda = new Venda();
+	/**
+	 * @brief Inicia uma nova venda, permitindo ao usuário adicionar produtos à
+	 *        venda.
+	 */
+	private void iniciarNovaVenda() {
+		VendaService vendaService = new VendaService();
+		ProdutoDao produtoDao = new ProdutoDao();
+		Venda novaVenda = new Venda();
 
+		System.out.println("\nAdicione produtos à venda:");
+		while (true) {
+			Produto produto = new Produto();
+			System.out.print("\nDigite o codigo do produto (digite '0' para encerrar):");
 
-        System.out.println("\nAdicione produtos à venda:");
-        while (true) {
-            Produto produto = new Produto();
-            System.out.print("Digite o codigo do produto (digite '0' para encerrar):");
+			int codigo = in.nextInt();
+			if (codigo == 0) {
+				break;
+			} else if (produtoDao.existePorId(codigo)) {
+				produto = produtoDao.buscarPorId(codigo);
+				ItemVenda item = new ItemVenda();
+				item.setProduto(produto);
 
-            int codigo = in.nextInt();
-            if ( codigo == 0) {
-                break;
-            } else if(produtoDao.existePorId(codigo)) {
-                produto = produtoDao.buscarPorId(codigo);
-                ItemVenda item = new ItemVenda();
-                item.setProduto(produto);
+				System.out.print("Digite a quantidade: ");
+				int quantidade = in.nextInt();
+				if (produto.getEstoque() >= quantidade) {
+					item.setQuantidade(quantidade);
+					novaVenda.addItem(item);
+				} else {
+					System.out.println(CorUtils.vermelho("Não existe essa quantidade do produto no estoque!\nEstoque atual do produto: "+produto.getEstoque()));
+				}
+			} else {
+				System.out.println(CorUtils.vermelho("Esse produto não existe!"));
+			}
+		}
 
-                System.out.println("Digite a quantidade: ");
-                int quantidade = in.nextInt();
-                item.setQuantidade(quantidade);
+		novaVenda.setData(LocalDate.now());
+		novaVenda.setTotal(novaVenda.calcular_total());
+		vendaService.setObjeto(novaVenda);
+		imprimirVenda(novaVenda);
+		vendaService.processar(Menu.CADASTRAR);
 
-                novaVenda.addItem(item);
-            } else {
-                System.out.println("Esse produto não existe!");
-            }
-        }
+	}
 
-        novaVenda.setData(LocalDate.now());
-        vendaService.setObjeto(novaVenda);
-        vendaService.processar(Menu.CADASTRAR);
+	/**
+	 * @brief Imprime os detalhes de uma venda.
+	 * @param venda Venda a ser impressa.
+	 */
+	public void imprimirVenda(Venda venda) {
 
-        System.out.println("----- Resumo da Nova Venda ------------------");
-        System.out.println("Data: " + novaVenda.getData());
-        System.out.println("Itens:");
-        for (ItemVenda item : novaVenda.getItens()) {
-            System.out.printf("- Produto: %s, Quantidade: %d, Subtotal: %.2f\n",
-                    item.getProduto().getNome(), item.getQuantidade(), item.getSubtotal());
-        }
-        System.out.printf("Total: %.2f\n", novaVenda.getTotal());
-        System.out.println("--------------------------------------------");
-    }
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		if (venda.getId() == 0) {
+			System.out.println("\n----- " + CorUtils.laranja("Resumo da Nova Venda") + " ------------------");
+		} else {
+			System.out.printf("ID da Venda: %d\n", venda.getId());
+		}
+
+		System.out.println(CorUtils.bold("Data: ") + venda.getData().format(formatter));
+		System.out.println(CorUtils.bold("Status: " + venda.getStatus()));
+		System.out.println(CorUtils.bold("Itens:"));
+		for (ItemVenda item : venda.getItens()) {
+			System.out.printf(CorUtils.bold("- Produto:") + " %s, Quantidade: %d, Subtotal: %.2f\n",
+					item.getProduto().getNome(), item.getQuantidade(), item.getSubtotal());
+		}
+		System.out.printf(CorUtils.verde("Total: %.2f\n"), venda.getTotal());
+		System.out.println("--------------------------------------------\n");
+	}
 
 }

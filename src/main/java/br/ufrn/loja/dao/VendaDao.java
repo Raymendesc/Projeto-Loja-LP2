@@ -4,17 +4,20 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.ufrn.loja.infra.ConnectionFactory;
 import br.ufrn.loja.model.ItemVenda;
+import br.ufrn.loja.model.Produto;
+import br.ufrn.loja.model.StatusVenda;
 import br.ufrn.loja.model.Venda;
 
-//organizar
+
 public class VendaDao implements GenericDao<Venda> {
 
-    private static final String INSERT = "INSERT INTO venda(data, total_venda) VALUES ('%', '%')";
+    private static final String INSERT = "INSERT INTO venda(data, status, total_venda) VALUES ('%', '%' , '%')";
     private static final String SELECT_ALL = "SELECT * FROM venda";
     private static final String DELETE = "DELETE FROM venda WHERE id = ";
     private static final String EXISTE = "SELECT COUNT(*) FROM venda WHERE id = ";
@@ -31,12 +34,19 @@ public class VendaDao implements GenericDao<Venda> {
         try {
             statement = con.createStatement();
             String sql = INSERT.replaceFirst("%", obj.getData().toString())
+            		.replaceFirst("%", obj.getStatus().toString())
                     .replaceFirst("%", Double.toString(obj.getTotal()));
             statement.executeUpdate(sql);
             obj.setId(buscarUltimoId());
             for(ItemVenda item : obj.getItens()){
                 item.setVendaId(obj);
                 new ItemVendaDao().salvar(item);
+                
+                Produto produto = new ProdutoDao().buscarPorId(item.getProduto().getId());
+                produto.setEstoque(produto.getEstoque()-item.getQuantidade());
+                if(produto.getEstoque()>=0) {
+                	new ProdutoDao().alterar(produto);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,8 +64,9 @@ public class VendaDao implements GenericDao<Venda> {
             while (rs.next()) {
                 Venda venda = new Venda();
                 venda.setId(rs.getInt("id"));
-                venda.setData(rs.getDate("data").toLocalDate());
-
+                venda.setData(LocalDate.parse(rs.getString("data")));
+                venda.setStatus(StatusVenda.fromDescricao(rs.getString("status")));
+                venda.setTotal(rs.getDouble("total_venda"));
                 // recupere os itens da venda do banco de dados
                 List<ItemVenda> itens = new ItemVendaDao().buscarPorVendaId(venda.getId());
                 venda.setItens(itens);
@@ -137,6 +148,7 @@ public class VendaDao implements GenericDao<Venda> {
         }
         return 0;
     }
+    
     private void fecharRecursos() {
         try {
             if (statement != null) {

@@ -136,6 +136,18 @@ public class ProdutoDao implements GenericDao<Produto> {
 			fecharRecursos();
 		}
 	}
+	
+	public void alterarEstoque(int id, int novoEstoque) {
+		try {
+			statement = con.createStatement();
+			String sql = "UPDATE produto SET estoque = " + novoEstoque + " WHERE id = " + id;
+			statement.executeUpdate(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			fecharRecursos();
+		}
+	}
 
 	/**
 	 * @brief Fecha os recursos (Statement) utilizados para interagir com o banco de
@@ -150,5 +162,7 @@ public class ProdutoDao implements GenericDao<Produto> {
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 }

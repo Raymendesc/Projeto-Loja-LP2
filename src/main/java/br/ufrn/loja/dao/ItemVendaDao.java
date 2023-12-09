@@ -2,6 +2,7 @@ package br.ufrn.loja.dao;
 
 import br.ufrn.loja.infra.ConnectionFactory;
 import br.ufrn.loja.model.ItemVenda;
+import br.ufrn.loja.model.Produto;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,10 +10,10 @@ import java.util.List;
 
 public class ItemVendaDao implements GenericDao<ItemVenda> {
 
-    private static final String INSERT = "INSERT INTO item_venda(venda_id, produto_id, quantidade, preco_unitario, subtotal) VALUES (%)";
+    private static final String INSERT = "INSERT INTO item_venda (venda_id, produto_id, quantidade, subtotal) VALUES (?, ?, ?, ?)";
 
     private Connection con;
-    private Statement statement;
+    private PreparedStatement pstmt;
 
     public ItemVendaDao(){
         con = ConnectionFactory.getInstance().getConnection();
@@ -20,16 +21,17 @@ public class ItemVendaDao implements GenericDao<ItemVenda> {
 
     @Override
     public void salvar(ItemVenda obj) {
-        String sql = "INSERT INTO item_venda (venda_id, produto_id, quantidade, preco_unitario, subtotal) VALUES (?, ?, ?, ?, ?)";
 
-        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+        try {
+        	pstmt = con.prepareStatement(INSERT);
             pstmt.setInt(1, obj.getVendaId().getId());
             pstmt.setInt(2, obj.getProduto().getId());
             pstmt.setInt(3, obj.getQuantidade());
-            pstmt.setDouble(4, obj.getProduto().getPreco_venda());
-            pstmt.setDouble(5, obj.getSubtotal());
+            pstmt.setDouble(4, obj.getSubtotal());
 
             pstmt.executeUpdate();
+            
+            
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -69,8 +71,8 @@ public class ItemVendaDao implements GenericDao<ItemVenda> {
      */
     private void fecharRecursos() {
         try {
-            if (statement != null) {
-                statement.close();
+            if (pstmt != null) {
+            	pstmt.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -79,7 +81,10 @@ public class ItemVendaDao implements GenericDao<ItemVenda> {
 
     public List<ItemVenda> buscarPorVendaId(int vendaId) {
         List<ItemVenda> itens = new ArrayList<>();
-        String sql = "SELECT * FROM item_venda WHERE venda_id = ?";
+        String sql = "SELECT v.id, v.quantidade, v.produto_id, p.nome, p.preco_venda " +
+                "FROM item_venda v " +
+                "JOIN produto p ON p.id = v.produto_id " +
+                "WHERE v.venda_id = ?";
 
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, vendaId);
@@ -90,13 +95,22 @@ public class ItemVendaDao implements GenericDao<ItemVenda> {
                 item.setId(rs.getInt("id"));
                 item.setQuantidade(rs.getInt("quantidade"));
 
+                Produto produto = new Produto();
+                produto.setId(rs.getInt("produto_id"));
+                produto.setNome(rs.getString("nome"));
+                produto.setPreco_venda(rs.getDouble("preco_venda"));
 
+                item.setProduto(produto);
                 itens.add(item);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+           fecharRecursos();
         }
 
         return itens;
     }
+
+
 }

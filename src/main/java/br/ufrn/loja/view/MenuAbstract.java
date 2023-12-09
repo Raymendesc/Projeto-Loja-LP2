@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 import br.ufrn.loja.model.Produto;
 import br.ufrn.loja.model.ProdutoBuilder;
-import br.ufrn.loja.model.Venda;
 import br.ufrn.loja.services.AbstractService;
 import br.ufrn.loja.services.ProdutoService;
 import br.ufrn.loja.services.VendaService;
