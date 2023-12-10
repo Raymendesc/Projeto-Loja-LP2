@@ -1,53 +1,64 @@
 package br.ufrn.loja.view;
 
-import java.util.Scanner;
 import br.ufrn.loja.services.FaturaService;
 import br.ufrn.loja.utils.CorUtils;
 
-public class TelaFaturamento {
+public class TelaFaturamento extends MenuAbstract {
 
-    private Scanner in;
     private FaturaService faturaService;
 
-    public TelaFaturamento(Scanner in, FaturaService faturaService) {
-        this.in = in;
-        this.faturaService = faturaService;
+    public TelaFaturamento() {
+        this.faturaService = new FaturaService();
     }
 
+    /**
+     * @brief Exibe o menu de faturamento e processa as opções escolhidas pelo usuário.
+     */
     public void exibirMenuFaturamento() {
-        int opcao;
-        do {
-            System.out.println("╔══════════════════════════════════════╗");
-            System.out.println("║           " + CorUtils.laranja("MENU DE FATURAMENTO") + "             ║");
-            System.out.println("╠══════════════════════════════════════╣");
-            /*
-             adicionar a integração com as opções do menu
-            */
-            System.out.println("╚══════════════════════════════════════╝");
-            System.out.print("Escolha uma opção: ");
-
-            opcao = in.nextInt();
-
-            switch (opcao) {
-                case 1:
-                    criarFatura();
-                    break;
-                case 2:
-                    adicionarItemFatura();
-                    break;
-                case 3:
-                    finalizarFatura();
-                    break;
-                case 0:
-                    break;
-                default:
-                    System.out.println(CorUtils.vermelho("Opção inválida. Tente novamente."));
-                    break;
-            }
-        } while (opcao != 0);
+        while (!saiu) {
+            exibirOpcoesFaturamento();
+            processarOpcaoFaturamento();
+        }
     }
 
+    /**
+     * @brief Exibe as opções do menu de faturamento.
+     */
+    public void exibirOpcoesFaturamento() {
+        System.out.println("╔══════════════════════════════════════╗");
+        System.out.println("║           " + CorUtils.laranja("MENU DE FATURAMENTO") + "           ║");
+        System.out.println("╠══════════════════════════════════════╣");
+        System.out.println("║  " + CADASTRAR + ". Criar Fatura                ║");
+        System.out.println("║  " + BUSCAR + ". Adicionar Item à Fatura       ║");
+        System.out.println("║  " + VER_TODOS + ". Finalizar Fatura            ║");
+        System.out.println("║  " + SAIR + ". Voltar                        ║");
+        System.out.println("╚══════════════════════════════════════╝");
+        System.out.print("Escolha uma opção: ");
 
+        opcao = in.nextInt();
+    }
+
+    /**
+     * @brief Processa a opção escolhida pelo usuário no menu de faturamento.
+     */
+    private void processarOpcaoFaturamento() {
+        switch (opcao) {
+            case CADASTRAR:
+                criarFatura();
+                break;
+            case BUSCAR:
+                adicionarItemFatura();
+                break;
+            case VER_TODOS:
+                calcularTotalFatura();
+                break;
+            case SAIR:
+                saiu = true;
+                break;
+            default:
+                System.out.println(CorUtils.vermelho("Opção inválida. Tente novamente."));
+        }
+    }
 
     private void criarFatura() {
     }
@@ -55,7 +66,8 @@ public class TelaFaturamento {
     private void adicionarItemFatura() {
     }
 
-    private void finalizarFatura() {
+    private void calcularTotalFatura() {
     }
+
 
 }
