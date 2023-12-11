@@ -4,6 +4,7 @@
 Este é um sistema de gerenciamento para uma loja de produtos. Ele permite gerenciar produtos, realizar vendas, e manter registros de transações.
 
 ## Proposito do projeto
+O propósito desse projeto é criar um sistema de gerenciamento abrangente para uma loja de produtos. O sistema visa facilitar e otimizar diversas operações relacionadas à gestão da loja, incluindo o gerenciamento de produtos, o acompanhamento de vendas e a manutenção de registros de transações.
 
 ## Tecnologias Utilizadas
 
