@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import br.ufrn.loja.exception.OpcaoInvalidaException;
 import br.ufrn.loja.utils.CorUtils;
-
+import br.ufrn.loja.view.TelaFaturamento;
 public class Menu extends MenuAbstract {
 
 	public Menu() {
@@ -73,7 +73,7 @@ public class Menu extends MenuAbstract {
 					break;
 
 				case FATURAMENTO:
-					System.out.println("Exibindo faturamento");
+					new TelaFaturamento(in).exibirMenuFaturamento();
 					break;
 
 				case VENDER:

@@ -12,7 +12,8 @@ public class Fatura {
     private List<ItemFatura> itensFatura;
     private double total;
 
-    public Fatura() {
+    public Fatura(String cliente) {
+        this.cliente = cliente;
         this.itensFatura = new ArrayList<>();
         this.total = 0.0;
     }

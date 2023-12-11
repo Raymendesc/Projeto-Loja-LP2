@@ -7,7 +7,7 @@ import br.ufrn.loja.model.ItemFatura;
 public class FaturaService extends AbstractService<Fatura> {
 
     public FaturaService() {
-        this.dao = new FaturaDao(); // Inicializa o DAO
+        dao = new FaturaDao(); // Inicializa o DAO
     }
 
     @Override
@@ -28,18 +28,20 @@ public class FaturaService extends AbstractService<Fatura> {
         return false;
     }
 
-    // Método para criar uma nova fatura
+  
     public void criarFatura(String cliente) {
-        this.objeto = new Fatura();
-        this.objeto.setCliente(cliente);
-        // definir ainda outros atributos necessários
+        this.objeto = new Fatura(cliente);
+        dao.salvar(this.objeto);  
     }
 
     public void adicionarItemFatura(ItemFatura item) {
         this.objeto.adicionarItem(item);
+        dao.alterar(this.objeto);  
     }
 
-    public void calcularTotalFatura() {
-        this.objeto.calcularTotal();
+    public double calcularTotalFatura() {
+        double total = this.objeto.calcularTotal();
+        dao.alterar(this.objeto);  
+        return total;
     }
 }
