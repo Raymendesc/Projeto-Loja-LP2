@@ -3,6 +3,7 @@ package br.ufrn.loja.view;
 
 import java.util.Scanner;
 
+import br.ufrn.loja.dao.ProdutoDao;
 import br.ufrn.loja.model.ItemFatura;
 import br.ufrn.loja.model.Produto;
 import br.ufrn.loja.services.FaturaService;
@@ -12,10 +13,12 @@ public class TelaFaturamento extends MenuAbstract {
 
     private FaturaService faturaService;
      private Scanner in;
+    private ProdutoDao produtoDao; 
 
      public TelaFaturamento(Scanner in) {
         this.in = in; 
         this.faturaService = new FaturaService();
+        this.produtoDao = new ProdutoDao();
     }
 
     /**

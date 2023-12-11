@@ -55,8 +55,9 @@ public class Fatura {
     }
 
     
-    public void calcularTotal() {
+    public double calcularTotal() {
         total = itensFatura.stream().mapToDouble(ItemFatura::getSubTotal).sum();
+        return total; 
     }
 
     
