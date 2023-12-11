@@ -1,3 +1,7 @@
+/**
+ * @file ItemVendaDao.java
+ * @brief Implementação da interface GenericDao para a entidade ItemVenda.
+ */
 package br.ufrn.loja.dao;
 
 import br.ufrn.loja.infra.ConnectionFactory;
@@ -7,14 +11,19 @@ import br.ufrn.loja.model.Produto;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * @class ItemVendaDao
+ * @brief Classe de acesso a dados (DAO) para a entidade ItemVenda.
+ */
 public class ItemVendaDao implements GenericDao<ItemVenda> {
 
     private static final String INSERT = "INSERT INTO item_venda (venda_id, produto_id, quantidade, subtotal) VALUES (?, ?, ?, ?)";
 
     private Connection con;
     private PreparedStatement pstmt;
-
+    /**
+     * @brief Construtor padrão que inicializa a conexão com o banco de dados.
+     */
     public ItemVendaDao(){
         con = ConnectionFactory.getInstance().getConnection();
     }
@@ -78,7 +87,11 @@ public class ItemVendaDao implements GenericDao<ItemVenda> {
             e.printStackTrace();
         }
     }
-
+    /**
+     * @brief Busca os itens de venda associados a uma venda específica.
+     * @param vendaId ID da venda associada aos itens.
+     * @return Lista de itens de venda associados à venda.
+     */
     public List<ItemVenda> buscarPorVendaId(int vendaId) {
         List<ItemVenda> itens = new ArrayList<>();
         String sql = "SELECT v.id, v.quantidade, v.produto_id, p.nome, p.preco_venda " +

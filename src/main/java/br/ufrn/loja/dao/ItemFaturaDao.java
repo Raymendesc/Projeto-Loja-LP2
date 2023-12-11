@@ -1,5 +1,6 @@
 package br.ufrn.loja.dao;
 
+import br.ufrn.loja.infra.ConnectionFactory;
 import br.ufrn.loja.model.ItemFatura;
 import java.sql.*;
 import java.util.ArrayList;

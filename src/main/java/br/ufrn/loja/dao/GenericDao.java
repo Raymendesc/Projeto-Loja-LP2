@@ -52,4 +52,5 @@ public interface GenericDao<E> {
 	 * @param obj Entidade com os dados atualizados.
 	 */
 	public void alterar(E obj);
+
 }

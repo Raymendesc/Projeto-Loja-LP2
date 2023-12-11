@@ -1,3 +1,7 @@
+/**
+ * @file VendaService.java
+ * @brief Definição da classe VendaService que fornece serviços relacionados à entidade Venda.
+ */
 package br.ufrn.loja.services;
 
 import br.ufrn.loja.dao.ItemVendaDao;
@@ -9,14 +13,22 @@ import br.ufrn.loja.utils.CorUtils;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * @class VendaService
+ * @brief Fornece serviços relacionados à entidade Venda.
+ */
 public class VendaService extends AbstractService<Venda> {
 
-
+    /**
+     * @brief Construtor padrão da classe VendaService.
+     */
     public VendaService() {
         dao = new VendaDao();
     }
-
+    /**
+     * @brief Valida se a venda possui itens adicionados.
+     * @return True se a venda for válida, False caso contrário.
+     */
     @Override
     protected boolean validar() {
         if(objeto.getItens().isEmpty()){
@@ -25,7 +37,9 @@ public class VendaService extends AbstractService<Venda> {
         }
         return true;
     }
-
+    /**
+     * @brief Imprime os detalhes de todas as vendas cadastradas.
+     */
     @Override
     protected void imprimir() {
         System.out.println("\n----- Detalhes da Venda ----------------------");
@@ -35,7 +49,9 @@ public class VendaService extends AbstractService<Venda> {
         });
         System.out.println("------------------------------------------------");
     }
-
+    /**
+     * @brief Remove a venda do sistema.
+     */
     @Override
     protected void remover() {
         if (dao.existePorId(objeto.getId())) {
@@ -45,13 +61,18 @@ public class VendaService extends AbstractService<Venda> {
             System.out.println(CorUtils.vermelho("Essa venda não existe!"));
         }
     }
-
+    /**
+     * @brief Busca e imprime os detalhes de uma venda pelo seu ID.
+     * @return True se a venda for encontrada, False caso contrário.
+     */
     @Override
     public boolean buscar() {
-        if (dao.existePorId(objeto.getId())) {
+        Venda vendaEncontrada = dao.buscarPorId(objeto.getId());
+
+        if (vendaEncontrada != null) {
             System.out.println("\n----- Detalhes da Venda ----------------------");
             System.out.printf("%-5s%-20s%s\n", "ID", "Data", "Itens");
-            System.out.println(dao.buscarPorId(objeto.getId()));
+            exibirDetalhesVenda(vendaEncontrada);
             System.out.println("------------------------------------------------");
             return true;
         } else {
@@ -78,6 +99,26 @@ public class VendaService extends AbstractService<Venda> {
         }
         return retorno;
     }
+    /**
+     * @brief Busca uma venda pelo seu ID.
+     * @param idVenda ID da venda a ser buscada.
+     * @return Objeto Venda correspondente ao ID ou null se não encontrada.
+     */
+    public Venda buscarVendaPorId(int idVenda) {
+        return dao.buscarPorId(idVenda);
+    }
+    /**
+     * @brief Exibe os detalhes de uma venda, incluindo seus itens.
+     * @param venda Venda a ser exibida.
+     */
+    private void exibirDetalhesVenda(Venda venda) {
+        System.out.printf("%-5d%-20s\n", venda.getId(), venda.getData());
 
+        System.out.println("Itens:");
+        for (ItemVenda item : venda.getItens()) {
+            System.out.printf("- Produto: %s, Quantidade: %d, Subtotal: %.2f\n",
+                    item.getProduto().getNome(), item.getQuantidade(), item.getSubtotal());
+        }
+    }
 }
 

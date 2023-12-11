@@ -1,3 +1,7 @@
+/**
+ * @file VendaDao.java
+ * @brief Implementação da interface GenericDao para a entidade Venda.
+ */
 package br.ufrn.loja.dao;
 
 import java.sql.Connection;
@@ -14,7 +18,10 @@ import br.ufrn.loja.model.Produto;
 import br.ufrn.loja.model.StatusVenda;
 import br.ufrn.loja.model.Venda;
 
-
+/**
+ * @class VendaDao
+ * @brief Classe de acesso a dados (DAO) para a entidade Venda.
+ */
 public class VendaDao implements GenericDao<Venda> {
 
     private static final String INSERT = "INSERT INTO venda(data, status, total_venda) VALUES ('%', '%' , '%')";
@@ -24,7 +31,9 @@ public class VendaDao implements GenericDao<Venda> {
     private static final String SELECT = "SELECT * FROM venda WHERE id = ";
     private Connection con;
     private Statement statement;
-
+    /**
+     * @brief Construtor padrão que inicializa a conexão com o banco de dados.
+     */
     public VendaDao() {
         con = ConnectionFactory.getInstance().getConnection();
     }
@@ -89,9 +98,8 @@ public class VendaDao implements GenericDao<Venda> {
             if (result.next()) {
                 Venda venda = new Venda();
                 venda.setId(result.getInt("id"));
-                venda.setData(result.getDate("data").toLocalDate());
+                venda.setData(LocalDate.parse(result.getString("data")));
 
-                // recupere os itens da venda do banco de dados
                 List<ItemVenda> itens = new ItemVendaDao().buscarPorVendaId(id);
                 venda.setItens(itens);
 
@@ -134,8 +142,24 @@ public class VendaDao implements GenericDao<Venda> {
 
     @Override
     public void alterar(Venda obj) {
+        try {
+            statement = con.createStatement();
+            if (obj.getStatus() == StatusVenda.CANCELADA) {
+                statement.executeUpdate("UPDATE venda SET status = 'CANCELADA' WHERE id = " + obj.getId());
+            } else {
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            fecharRecursos();
+        }
     }
 
+
+    /**
+     * @brief Busca o último ID inserido no banco de dados.
+     * @return Último ID inserido.
+     */
     public int buscarUltimoId(){
         try {
             statement = con.createStatement();
@@ -148,7 +172,9 @@ public class VendaDao implements GenericDao<Venda> {
         }
         return 0;
     }
-    
+    /**
+     * @brief Fecha os recursos (Statement) utilizados para interagir com o banco de dados.
+     */
     private void fecharRecursos() {
         try {
             if (statement != null) {
