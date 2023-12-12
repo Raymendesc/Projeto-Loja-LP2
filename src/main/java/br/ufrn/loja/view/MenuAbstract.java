@@ -18,6 +18,8 @@ public abstract class MenuAbstract {
 	public static final int VENDER = 5;
 	public static final int REMOVER = 6;
 	public static final int ALTERAR = 7;
+	public static final int CANCELAR = 8;
+	
 	
 	protected AbstractService<Produto> produtoService = new ProdutoService();
 

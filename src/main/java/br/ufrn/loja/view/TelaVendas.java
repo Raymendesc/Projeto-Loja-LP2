@@ -9,10 +9,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import br.ufrn.loja.dao.ProdutoDao;
+import br.ufrn.loja.exception.OpcaoInvalidaException;
 import br.ufrn.loja.model.ItemVenda;
 import br.ufrn.loja.model.Produto;
+import br.ufrn.loja.model.StatusVenda;
 import br.ufrn.loja.model.Venda;
-import br.ufrn.loja.services.VendaService;
 import br.ufrn.loja.utils.CorUtils;
 
 /**
@@ -62,20 +63,20 @@ public class TelaVendas extends MenuAbstract {
 		System.out.println("Opção escolhida: " + opcao);
 
 		switch (opcao) {
-			case SAIR:
-				saiu = true;
-				break;
-			case CADASTRAR:
-				iniciarNovaVenda();
-				break;
-			case BUSCAR:
-				buscarVendaPorId();
-				break;
-			case VER_TODOS:
-				exibirVendasRealizadas();
-				break;
-			default:
-				System.out.println("Opção inválida. Tente novamente.");
+		case SAIR:
+			saiu = true;
+			break;
+		case CADASTRAR:
+			iniciarNovaVenda();
+			break;
+		case BUSCAR:
+			buscarVendaPorId();
+			break;
+		case VER_TODOS:
+			exibirVendasRealizadas();
+			break;
+		default:
+			throw new OpcaoInvalidaException("Opção inválida! Por favor, escolha uma opção válida.");
 		}
 	}
 
@@ -99,10 +100,10 @@ public class TelaVendas extends MenuAbstract {
 
 	/**
 	 * @brief Inicia uma nova venda, permitindo ao usuário adicionar produtos à
-	 * venda.
+	 *        venda.
 	 */
 	private void iniciarNovaVenda() {
-		VendaService vendaService = new VendaService();
+
 		ProdutoDao produtoDao = new ProdutoDao();
 		Venda novaVenda = new Venda();
 
@@ -129,7 +130,9 @@ public class TelaVendas extends MenuAbstract {
 					item.setQuantidade(quantidade);
 					novaVenda.addItem(item);
 				} else {
-					System.out.println(CorUtils.vermelho("Não existe essa quantidade do produto no estoque!\nEstoque atual do produto: " + produto.getEstoque()));
+					System.out.println(CorUtils
+							.vermelho("Não existe essa quantidade do produto no estoque!\nEstoque atual do produto: "
+									+ produto.getEstoque()));
 				}
 			} else {
 				System.out.println(CorUtils.vermelho("Esse produto não existe!"));
@@ -145,8 +148,10 @@ public class TelaVendas extends MenuAbstract {
 	}
 
 	/**
-	 * @param venda Venda a ser impressa.
+	 * 
 	 * @brief Imprime os detalhes de uma venda.
+	 * 
+	 * @param venda Venda a ser impressa.
 	 */
 	public void imprimirVenda(Venda venda) {
 
@@ -158,7 +163,12 @@ public class TelaVendas extends MenuAbstract {
 		}
 
 		System.out.println(CorUtils.bold("Data: ") + venda.getData().format(formatter));
-		System.out.println(CorUtils.bold("Status: " + venda.getStatus()));
+		
+		if (venda.getStatus() == StatusVenda.CANCELADA) {
+			System.out.println(CorUtils.bold("Status:") + CorUtils.vermelho(" " + venda.getStatus()));
+		} else
+			System.out.println(CorUtils.bold("Status: " + venda.getStatus()));
+		
 		System.out.println(CorUtils.bold("Itens:"));
 		for (ItemVenda item : venda.getItens()) {
 			System.out.printf(CorUtils.bold("- Produto:") + " %s, Quantidade: %d, Subtotal: %.2f\n",
@@ -167,39 +177,37 @@ public class TelaVendas extends MenuAbstract {
 		System.out.printf(CorUtils.verde("Total: %.2f\n"), venda.getTotal());
 		System.out.println("--------------------------------------------\n");
 	}
+
 	/**
 	 * @brief Busca uma venda pelo seu ID e exibe os detalhes.
 	 */
 	private void buscarVendaPorId() {
-		System.out.println("Digite o ID da venda a ser buscada: ");
+		System.out.print("Digite o ID da venda a ser buscada: ");
 		int idVenda = in.nextInt();
 
-		VendaService vendaService = new VendaService();
 		Venda vendaEncontrada = vendaService.buscarVendaPorId(idVenda);
 
 		if (vendaEncontrada != null) {
-			exibirDetalhesVenda(vendaEncontrada);
+			imprimirVenda(vendaEncontrada);
+			if (vendaEncontrada.getStatus() == StatusVenda.CONCLUIDA) {
+				processarCancelamentoVenda(vendaEncontrada);
+			}
 		} else {
 			System.out.println(CorUtils.vermelho("Venda não encontrada."));
 		}
 	}
+
 	/**
-	 * @param venda Venda a ser exibida.
-	 * @brief Exibe os detalhes de uma venda.
+	 * Método para verificar se inicia ou não o cancelamento de uma venda.
+	 *
+	 * @param venda A venda que pode ser cancelada.
 	 */
-	private void exibirDetalhesVenda(Venda venda) {
-
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		System.out.printf("ID da Venda: %d\n", venda.getId());
-		System.out.println(CorUtils.bold("Data: ") + venda.getData().format(formatter));
-
-		System.out.println("Itens:");
-		for (ItemVenda item : venda.getItens()) {
-			System.out.printf("- Produto: %s, Quantidade: %d, Subtotal: %.2f\n",
-					item.getProduto().getNome(), item.getQuantidade(), item.getSubtotal());
+	private void processarCancelamentoVenda(Venda venda) {
+		System.out.println("[" + SAIR + "] Voltar   [" + CANCELAR + "] Cancelar ");
+		opcao = in.nextInt();
+		if (opcao == CANCELAR) {
+			vendaService.setObjeto(venda);
+			vendaService.processar(ALTERAR);
 		}
-
-		System.out.printf(CorUtils.verde("Total: %.2f\n"), venda.calcular_total());
-		System.out.println("--------------------------------------------\n");
 	}
 }

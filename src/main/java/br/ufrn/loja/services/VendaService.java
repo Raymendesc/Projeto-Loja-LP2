@@ -4,9 +4,9 @@
  */
 package br.ufrn.loja.services;
 
-import br.ufrn.loja.dao.ItemVendaDao;
 import br.ufrn.loja.dao.VendaDao;
 import br.ufrn.loja.model.ItemVenda;
+import br.ufrn.loja.model.StatusVenda;
 import br.ufrn.loja.model.Venda;
 import br.ufrn.loja.utils.CorUtils;
 
@@ -119,6 +119,20 @@ public class VendaService extends AbstractService<Venda> {
             System.out.printf("- Produto: %s, Quantidade: %d, Subtotal: %.2f\n",
                     item.getProduto().getNome(), item.getQuantidade(), item.getSubtotal());
         }
+    }
+    
+    /**
+     * Calcula o faturamento total das vendas no período especificado, excluindo vendas canceladas.
+     *
+     * @param inicio Data de início do período.
+     * @param fim    Data de término do período.
+     * @return O faturamento total no período, excluindo vendas canceladas.
+     */
+    public double calcularFaturamento(String inicio, String fim) {
+        return obterTodasAsVendas(inicio, fim).stream()
+                .filter(venda -> venda.getStatus() != StatusVenda.CANCELADA)
+                .mapToDouble(Venda::getTotal)
+                .sum();
     }
 }
 

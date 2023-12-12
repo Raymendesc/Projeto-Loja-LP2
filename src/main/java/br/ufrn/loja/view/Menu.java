@@ -73,7 +73,7 @@ public class Menu extends MenuAbstract {
 					break;
 
 				case FATURAMENTO:
-					new TelaFaturamento(in).exibirMenuFaturamento();
+					new TelaFaturamento(in).run();
 					break;
 
 				case VENDER:

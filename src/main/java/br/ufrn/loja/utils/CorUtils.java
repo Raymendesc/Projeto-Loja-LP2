@@ -21,6 +21,6 @@ public class CorUtils {
 		return "\u001B[1;31m" + texto + "\u001B[0m";
 	}
 	public static String bold(String texto) {
-		return "\u001B[1m-"+texto+"\u001B[0m";
+		return "\u001B[1m"+texto+"\u001B[0m";
 	}
 }

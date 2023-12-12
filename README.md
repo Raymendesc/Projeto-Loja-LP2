@@ -6,18 +6,12 @@ Este é um sistema de gerenciamento para uma loja de produtos. Ele permite geren
 ## Proposito do projeto
 O propósito desse projeto é criar um sistema de gerenciamento abrangente para uma loja de produtos. O sistema visa facilitar e otimizar diversas operações relacionadas à gestão da loja, incluindo o gerenciamento de produtos, o acompanhamento de vendas e a manutenção de registros de transações.
 
-## Tecnologias Utilizadas
-
-- Java
-- JDBC para conexão com banco de dados
-- Testes unitários com JUnit
-
-## Diagrma de Classes
+## Diagrama de Classes
 
 ## Tecnologias utilizadas
 
 - Java 17;
-- MySQL
+- SQLite
 - Gradle
 
 ## Estrutura do Projeto
@@ -36,9 +30,21 @@ O projeto está organizado em várias camadas, cada uma responsável por diferen
 - Gestão de produtos: adicionar, atualizar, remover e buscar produtos.
 - Realização de vendas: registrar vendas de produtos.
 - Consulta de vendas: visualizar o histórico de vendas.
+- Cancelar uma venda.
+- Ver faturamento.
 
 
-## Como realizar o build e executar o projeto
+## Como realizar o build
+
+1. **Navegue até o Diretório do Projeto:**
+   Abra um terminal e navegue até o diretório do seu projeto.
+
+3. **Execute o Comando de Build:**
+   Execute o seguinte comando para construir o projeto:
+
+```console
+$ ./gradlew build
+```
 
 ## Autores
 | [<img alt="Raymendesc" src="https://github.com/Raymendesc.png?size=115" width="115"><br><sub>@Raymendesc</sub>](https://github.com/raymendesc)| [<img alt="Leandro208" src="https://github.com/leandro208.png?size=115" width="115"><br><sub>@Leandro208</sub>](https://github.com/leandro208)| [<img alt="DougFelipe" src="https://github.com/DougFelipe.png?size=115" width="115"><br><sub>@DougFelipe</sub>](https://github.com/DougFelipe)| 
