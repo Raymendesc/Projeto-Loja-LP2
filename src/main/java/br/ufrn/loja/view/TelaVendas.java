@@ -110,14 +110,13 @@ public class TelaVendas extends MenuAbstract {
 		System.out.println("\nAdicione produtos à venda:");
 		while (true) {
 			Produto produto = new Produto();
-			System.out.print("\nDigite o código do produto (digite '0' para encerrar, '3' para cancelar):");
+			System.out.print("\nDigite o código do produto (digite '0' para encerrar, '-1' para cancelar o procedimento):");
 
 			int codigo = in.nextInt();
 			if (codigo == 0) {
 				break;
-			} else if (codigo == 3) {
+			} else if (codigo == -1) {
 				System.out.println("Venda cancelada.");
-				novaVenda.cancelarVenda();
 				return;
 			} else if (produtoDao.existePorId(codigo)) {
 				produto = produtoDao.buscarPorId(codigo);
