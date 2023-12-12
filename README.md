@@ -8,6 +8,8 @@ O propósito desse projeto é criar um sistema de gerenciamento abrangente para 
 
 ## Diagrama de Classes
 
+![diagrama-de-classes](https://github.com/imetropoledigital/trabalho-final-rayana-mendes/assets/81039247/7fafcd11-1ad5-4c5b-b96a-d5de0b946d32)
+
 ## Tecnologias utilizadas
 
 - Java 17;
